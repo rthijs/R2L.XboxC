@@ -8,15 +8,14 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class XboxControllerHelper {
-    static final AtomicInteger controllerIndex = new AtomicInteger();
+    private static final AtomicInteger controllerIndex = new AtomicInteger();
 
-    static final void addListenerToEveryController() {
+    public static final void addListenerToEveryController() {
         Arrays.stream(Controllers.getControllers().toArray())
                 .forEach(XboxControllerHelper::addListenerToController);
     }
 
-    private static void addListenerToController(Controller controller) {
-        Gdx.app.log("adding listener", controller.toString());
+    private static final void addListenerToController(Controller controller) {
         controller.addListener(new XboxControllerListener(controllerIndex.getAndIncrement()));
     }
 }
