@@ -1,11 +1,20 @@
 package r2l.xboxc;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
+import com.badlogic.gdx.controllers.mappings.Xbox;
 import com.badlogic.gdx.math.Vector3;
 
 public class XboxControllerListener  implements ControllerListener  {
+
+    private final int controllerIndex;
+
+    public XboxControllerListener(int controllerIndex) {
+        this.controllerIndex = controllerIndex;
+    }
+
     @Override
     public void connected(Controller controller) {
 
@@ -18,6 +27,7 @@ public class XboxControllerListener  implements ControllerListener  {
 
     @Override
     public boolean buttonDown(Controller controller, int buttonCode) {
+        Gdx.app.log("[" + controllerIndex + "] " + "buttonDown", controller.toString() +" : " + buttonCode);
         return false;
     }
 

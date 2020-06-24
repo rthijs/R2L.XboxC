@@ -3,14 +3,13 @@ package r2l.xboxc;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
-import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
-import com.badlogic.gdx.controllers.PovDirection;
-import com.badlogic.gdx.controllers.mappings.Xbox;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector3;
+
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class XboxControllerInput extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -21,9 +20,7 @@ public class XboxControllerInput extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
 
-		for (Controller controller : Controllers.getControllers()) {
-			controller.addListener(new XboxControllerListener());
-		}
+		XboxControllerHelper.addListenerToEveryController();
 	}
 
 	@Override
@@ -40,4 +37,6 @@ public class XboxControllerInput extends ApplicationAdapter {
 		batch.dispose();
 		img.dispose();
 	}
+
+
 }
