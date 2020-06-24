@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
-import com.badlogic.gdx.controllers.mappings.Xbox;
 import com.badlogic.gdx.math.Vector3;
+import r2l.xboxc.hardwareAbstraction.Button;
+
+import java.util.Optional;
 
 public class XboxControllerListener  implements ControllerListener  {
 
@@ -27,7 +29,7 @@ public class XboxControllerListener  implements ControllerListener  {
 
     @Override
     public boolean buttonDown(Controller controller, int buttonCode) {
-        Gdx.app.log("[" + controllerIndex + "] " + "buttonDown", controller.toString() +" : " + buttonCode);
+        Gdx.app.log("buttonDown", String.format("Controller [%s] - button [%s]", controllerIndex, Button.valueOfCode(buttonCode)));
         return false;
     }
 
