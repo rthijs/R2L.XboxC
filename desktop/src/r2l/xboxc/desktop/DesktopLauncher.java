@@ -11,6 +11,7 @@ public class DesktopLauncher {
 		config.height = 391;
 		config.width = 640;
 		config.resizable = false;
+		config.forceExit = false;
 		new LwjglApplication(new XboxControllerMain(), config);
 	}
 }
