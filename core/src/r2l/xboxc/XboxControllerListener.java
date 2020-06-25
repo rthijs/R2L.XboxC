@@ -7,8 +7,6 @@ import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
 import r2l.xboxc.hardwareAbstraction.Button;
 
-import java.util.Optional;
-
 public class XboxControllerListener  implements ControllerListener  {
 
     private final int controllerIndex;
