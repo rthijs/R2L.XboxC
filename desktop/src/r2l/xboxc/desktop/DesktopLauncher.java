@@ -8,7 +8,7 @@ import r2l.xboxc.XboxControllerMain;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "Roel's 360 Controller Socket Server";
+		config.title = "R2L XBOXC";
 		config.height = 391;
 		config.width = 640;
 		config.resizable = false;

@@ -10,12 +10,14 @@ public class MainView extends ScreenAdapter {
     private static Batch batch = new SpriteBatch();
     private static BackGround backGround = new BackGround();
     private static Texture xBox360ControllerImage = new Texture("360Controller.png");
+    private static Texture xBox360ControllerOverlay = new Texture("360ControllerOverlay.png");
 
     @Override
     public void render(float delta) {
         batch.begin();
         backGround.render(batch);
         batch.draw(xBox360ControllerImage,0,0);
+        batch.draw(xBox360ControllerOverlay,0,0);
         batch.end();
     }
 
