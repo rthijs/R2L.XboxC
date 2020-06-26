@@ -23,16 +23,19 @@ public class XboxControllerListener extends ControllerAdapter {
 
     @Override
     public boolean buttonUp(Controller controller, int buttonCode) {
+        Gdx.app.log("buttonUp  ", String.format("Controller [%s] - button [%s]", controllerIndex, Button.valueOfCode(buttonCode)));
         return false;
     }
 
     @Override
     public boolean axisMoved(Controller controller, int axisCode, float value) {
+        Gdx.app.log("axisMoved ", String.format("Controller [%s] - axis [%s] : %s", controllerIndex, axisCode, value));
         return false;
     }
 
     @Override
     public boolean povMoved(Controller controller, int povCode, PovDirection value) {
+        Gdx.app.log("povMoved  ", String.format("Controller [%s] - povCode [%s] : %s", controllerIndex, povCode, value));
         return false;
     }
 }
