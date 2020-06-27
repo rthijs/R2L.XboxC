@@ -9,12 +9,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class XboxControllerHelper {
     private static final AtomicInteger controllerIndex = new AtomicInteger();
 
-    public static final void addListenerToEveryController() {
+    public static void addListenerToEveryController() {
         Arrays.stream(Controllers.getControllers().toArray())
                 .forEach(XboxControllerHelper::addListenerToController);
     }
 
-    private static final void addListenerToController(Controller controller) {
+    private static void addListenerToController(Controller controller) {
         controller.addListener(new XboxControllerListener(controllerIndex.getAndIncrement()));
     }
 }

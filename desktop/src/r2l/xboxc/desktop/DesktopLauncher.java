@@ -3,7 +3,7 @@ package r2l.xboxc.desktop;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import r2l.xboxc.XboxControllerMain;
+import r2l.xboxc.Main;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -16,6 +16,6 @@ public class DesktopLauncher {
 		config.addIcon("icons/360ControllerIcon128x128.png", Files.FileType.Internal);
 		config.addIcon("icons/360ControllerIcon32x32.png", Files.FileType.Internal);
 		config.addIcon("icons/360ControllerIcon16x16.png", Files.FileType.Internal);
-		new LwjglApplication(new XboxControllerMain(), config);
+		new LwjglApplication(new Main(), config);
 	}
 }

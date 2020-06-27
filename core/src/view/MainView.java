@@ -1,30 +1,34 @@
 package view;
 
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainView extends ScreenAdapter {
 
-    private static Batch batch = new SpriteBatch();
-    private static BackGround backGround = new BackGround();
-    private static Texture xBox360ControllerImage = new Texture("360Controller.png");
-    private static Texture xBox360ControllerOverlay = new Texture("360ControllerOverlay.png");
+    private static final Batch SPRITE_BATCH = new SpriteBatch();
+    private static final List<ScreenAdapter> SCREEN_ADAPTERS = new ArrayList<>();
+
+    static {
+        SCREEN_ADAPTERS.add(new BackGround(SPRITE_BATCH));
+        SCREEN_ADAPTERS.add(new XboxControllerImage(SPRITE_BATCH));
+        SCREEN_ADAPTERS.add(new XboxControllerOverlay(SPRITE_BATCH));
+        SCREEN_ADAPTERS.add(new MarkerOverlay(SPRITE_BATCH));
+    }
 
     @Override
     public void render(float delta) {
-        batch.begin();
-        backGround.render(batch);
-        batch.draw(xBox360ControllerImage,0,0);
-        batch.draw(xBox360ControllerOverlay,0,0);
-        batch.end();
+        SPRITE_BATCH.begin();
+        SCREEN_ADAPTERS.forEach(screenAdapter -> screenAdapter.render(delta));
+        SPRITE_BATCH.end();
     }
 
     @Override
     public void dispose() {
-        backGround.dispose();
-        xBox360ControllerImage.dispose();
-        batch.dispose();
+        SCREEN_ADAPTERS.forEach(ScreenAdapter::dispose);
+        SPRITE_BATCH.dispose();
     }
 }
