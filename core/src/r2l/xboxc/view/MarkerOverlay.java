@@ -1,4 +1,4 @@
-package view;
+package r2l.xboxc.view;
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.controllers.Controllers;
@@ -8,8 +8,8 @@ import r2l.xboxc.hardwareAbstraction.ControllerItem;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static view.HardwareCoordinates.getCoordinates;
-import static view.HardwareCoordinates.getHardwareItems;
+import static r2l.xboxc.view.HardwareCoordinates.getCoordinates;
+import static r2l.xboxc.view.HardwareCoordinates.getHardwareItems;
 
 public class MarkerOverlay extends ScreenAdapter {
     private static Batch batch;

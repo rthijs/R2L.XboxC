@@ -1,4 +1,4 @@
-package view;
+package r2l.xboxc.view;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

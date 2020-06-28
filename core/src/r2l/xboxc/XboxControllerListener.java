@@ -14,10 +14,10 @@ public class XboxControllerListener extends ControllerAdapter {
         this.controllerIndex = controllerIndex;
     }
 
-
     @Override
     public boolean buttonDown(Controller controller, int buttonCode) {
         Gdx.app.log("buttonDown", String.format("Controller [%s] - button [%s]", controllerIndex, ControllerItem.valueOfCode(buttonCode)));
+        XboxControllerObservable.getInstance().setControllerItemValue(controllerIndex,ControllerItem.valueOfCode(buttonCode),0F,1F);
         return false;
     }
 

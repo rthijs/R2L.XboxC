@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class XboxControllerHelper {
-    private static final AtomicInteger controllerIndex = new AtomicInteger();
+    private static final AtomicInteger CONTROLLER_INDEX = new AtomicInteger();
 
     public static void addListenerToEveryController() {
         Arrays.stream(Controllers.getControllers().toArray())
@@ -15,6 +15,6 @@ public class XboxControllerHelper {
     }
 
     private static void addListenerToController(Controller controller) {
-        controller.addListener(new XboxControllerListener(controllerIndex.getAndIncrement()));
+        controller.addListener(new XboxControllerListener(CONTROLLER_INDEX.getAndIncrement()));
     }
 }

@@ -2,15 +2,16 @@ package r2l.xboxc;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import view.MainView;
+import r2l.xboxc.view.MainView;
 
 public class Main extends ApplicationAdapter {
 
 	private MainView mainView;
+	private XboxControllerObservable observable;
 
 	@Override
 	public void create() {
-		mainView = new MainView();
+		mainView = new MainView(observable);
 		XboxControllerHelper.addListenerToEveryController();
 	}
 

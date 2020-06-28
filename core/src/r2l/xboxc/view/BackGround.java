@@ -1,4 +1,4 @@
-package view;
+package r2l.xboxc.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
