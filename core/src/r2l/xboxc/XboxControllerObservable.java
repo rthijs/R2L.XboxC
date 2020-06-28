@@ -9,7 +9,7 @@ import java.beans.PropertyChangeSupport;
 public final class XboxControllerObservable {
 
     private static XboxControllerObservable INSTANCE;
-    private PropertyChangeSupport support;
+    private final PropertyChangeSupport support;
 
     private XboxControllerObservable() {
         support = new PropertyChangeSupport(this);
@@ -22,13 +22,8 @@ public final class XboxControllerObservable {
         return INSTANCE;
     }
 
-
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         support.addPropertyChangeListener(pcl);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener pcl) {
-        support.removePropertyChangeListener(pcl);
     }
 
     public void setControllerItemValue(int controllerIndex, ControllerItem item, Float oldValue, Float newValue) {

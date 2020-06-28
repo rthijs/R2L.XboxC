@@ -7,11 +7,10 @@ import r2l.xboxc.view.MainView;
 public class Main extends ApplicationAdapter {
 
 	private MainView mainView;
-	private XboxControllerObservable observable;
 
 	@Override
 	public void create() {
-		mainView = new MainView(observable);
+		mainView = new MainView();
 		XboxControllerHelper.addListenerToEveryController();
 	}
 
