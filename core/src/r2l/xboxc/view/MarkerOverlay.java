@@ -12,9 +12,11 @@ import static r2l.xboxc.view.HardwareCoordinates.getCoordinates;
 import static r2l.xboxc.view.HardwareCoordinates.getHardwareItems;
 
 public class MarkerOverlay extends ScreenAdapter {
+
     private static Batch batch;
 
     public MarkerOverlay(Batch batch) {
+        XboxControllerObserver.getInstance();
         MarkerOverlay.batch = batch;
     }
 
