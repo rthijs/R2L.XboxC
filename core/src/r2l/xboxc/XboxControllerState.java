@@ -8,11 +8,17 @@ import java.util.Map;
 
 public class XboxControllerState {
 
-    private static final Map<ControllerItem, Float> CURRENT_CONTROLLER_STATE = new HashMap<>();
     private static final Float INITIAL_VALUE = 0f;
+    private final int controllerIndex;
+    private Map<ControllerItem, Float> CURRENT_CONTROLLER_STATE = new HashMap<>();
 
-    static {
+    public XboxControllerState(int controllerIndex) {
+        this.controllerIndex = controllerIndex;
         Arrays.stream(ControllerItem.values()).forEach(item -> CURRENT_CONTROLLER_STATE.put(item, INITIAL_VALUE));
+    }
+
+    public int getControllerIndex() {
+        return controllerIndex;
     }
 
     public float getCurrentValue(ControllerItem item) {

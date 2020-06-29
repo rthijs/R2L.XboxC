@@ -18,7 +18,7 @@ public final class XboxControllerObservable {
 
     static {
         IntStream.range(0, Controllers.getControllers().size)
-                .forEach(i -> XBOX_CONTROLLER_STATES.add(new XboxControllerState()));
+                .forEach(i -> XBOX_CONTROLLER_STATES.add(new XboxControllerState(i)));
     }
 
     private XboxControllerObservable() {
@@ -37,9 +37,20 @@ public final class XboxControllerObservable {
     }
 
     public void setControllerItemValue(int controllerIndex, ControllerItem item, Float newValue) {
-        Float oldValue = XBOX_CONTROLLER_STATES.get(controllerIndex).getCurrentValue(item);
-        XBOX_CONTROLLER_STATES.get(controllerIndex).setValue(item, newValue);
-        Gdx.app.log(controllerIndex + ":" + item.name(), oldValue.toString() + " -> " + newValue.toString());
-        support.fireIndexedPropertyChange(item.name(), controllerIndex, oldValue, newValue);
+        XBOX_CONTROLLER_STATES.stream()
+                .filter(xboxControllerState -> xboxControllerState.getControllerIndex() ==  controllerIndex)
+                .findFirst()
+                .ifPresent(xboxControllerState -> {
+                    support.fireIndexedPropertyChange(item.name(), controllerIndex, getControllerItemValue(controllerIndex, item), newValue);
+                    xboxControllerState.setValue(item, newValue);
+                });
+    }
+
+    public Float getControllerItemValue(int controllerIndex, ControllerItem item) {
+        return XBOX_CONTROLLER_STATES.stream()
+                .filter(xboxControllerState -> xboxControllerState.getControllerIndex() == controllerIndex)
+                .findFirst()
+                .map(xboxControllerState -> xboxControllerState.getCurrentValue(item))
+                .orElse(0f);
     }
 }
