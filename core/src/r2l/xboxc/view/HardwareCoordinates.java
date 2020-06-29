@@ -1,8 +1,6 @@
 package r2l.xboxc.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.controllers.PovDirection;
-import com.badlogic.gdx.controllers.mappings.Xbox;
 import r2l.xboxc.hardwareAbstraction.ControllerItem;
 
 import java.awt.Point;
@@ -78,11 +76,5 @@ public class HardwareCoordinates {
                 .filter(item -> item.controllerItem.equals(controllerItem))
                 .findFirst()
                 .orElse(UNKNOWN);
-    }
-
-    public static List<ControllerItem> getHardwareItems() {
-        return HARDWARE_ITEM_COORDINATES.stream()
-                .map(hardwareItem -> hardwareItem.controllerItem)
-                .collect(Collectors.toList());
     }
 }

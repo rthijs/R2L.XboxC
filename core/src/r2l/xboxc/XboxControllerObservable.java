@@ -1,6 +1,5 @@
 package r2l.xboxc;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controllers;
 import r2l.xboxc.hardwareAbstraction.ControllerItem;
 

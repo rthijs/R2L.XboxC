@@ -1,8 +1,12 @@
 package r2l.xboxc.hardwareAbstraction;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.controllers.mappings.Xbox;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 public enum ControllerItem {
@@ -42,7 +46,17 @@ public enum ControllerItem {
     //just in case
     UNKNOWN(-1);
 
+    private static final List<ControllerItem> axis = new ArrayList<>(); // axis can share code with button
+
     public final int code;
+
+    static {
+        Arrays.stream(ControllerItem.values())
+                .filter(controllerItem -> controllerItem.name().contains("AXIS") || controllerItem.name().contains("TRIGGER"))
+                .forEach(controllerItem -> axis.add(controllerItem));
+        Gdx.app.log("axis", axis.toString());
+    }
+
 
     ControllerItem(int code) {
         this.code = code;
@@ -52,6 +66,13 @@ public enum ControllerItem {
         return Stream.of(ControllerItem.values())
                 .filter(item -> code == item.code)
                 .findAny()
+                .orElse(UNKNOWN);
+    }
+
+    public static ControllerItem getAxisForCode(int code) {
+        return axis.stream()
+                .filter(controllerItem -> controllerItem.code == code)
+                .findFirst()
                 .orElse(UNKNOWN);
     }
 

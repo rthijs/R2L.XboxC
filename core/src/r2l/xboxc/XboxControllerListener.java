@@ -36,7 +36,7 @@ public class XboxControllerListener extends ControllerAdapter {
 
     @Override
     public boolean axisMoved(Controller controller, int axisCode, float value) {
-        Gdx.app.log("axisMoved ", String.format("Controller [%s] - axis [%s] : %s", controllerIndex, ControllerItem.valueOfCode(axisCode), value));
+        Gdx.app.log("axisMoved ", String.format("Controller [%s] - axis [%s] : %s", controllerIndex, ControllerItem.getAxisForCode(axisCode), value));
         return false;
     }
 

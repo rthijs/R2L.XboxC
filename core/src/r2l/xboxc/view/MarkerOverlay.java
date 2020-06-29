@@ -1,18 +1,14 @@
 package r2l.xboxc.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import r2l.xboxc.XboxControllerObservable;
 import r2l.xboxc.hardwareAbstraction.ControllerItem;
 
 import java.awt.*;
 import java.util.Arrays;
 import java.util.stream.IntStream;
-
-import static r2l.xboxc.view.HardwareCoordinates.getHardwareItems;
 
 public class MarkerOverlay extends ScreenAdapter {
 
@@ -37,7 +33,7 @@ public class MarkerOverlay extends ScreenAdapter {
     }
 
     private boolean markerShouldBeDrawn(int controllerIndex, ControllerItem controllerItem) {
-        return !xBoxControllerObservable.getControllerItemValue(controllerIndex, controllerItem).equals(Float.valueOf(0f));
+        return !xBoxControllerObservable.getControllerItemValue(controllerIndex, controllerItem).equals(0f);
     }
 
     private void drawMarker(int controllerIndex, Point coordinates) {
