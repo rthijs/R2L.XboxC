@@ -1,60 +1,57 @@
 package r2l.xboxc.hardwareAbstraction;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.controllers.mappings.Xbox;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum ControllerItem {
     //buttons
-    A(Xbox.A),
-    B(Xbox.B),
-    X(Xbox.X),
-    Y(Xbox.Y),
-    GUIDE(Xbox.GUIDE),
-    L_BUMPER(Xbox.L_BUMPER),
-    R_BUMPER(Xbox.R_BUMPER),
-    BACK(Xbox.BACK),
-    START(Xbox.START),
-    DPAD_UP(Xbox.DPAD_UP),
-    DPAD_DOWN(Xbox.DPAD_DOWN),
-    DPAD_LEFT(Xbox.DPAD_LEFT),
-    DPAD_RIGHT(Xbox.DPAD_RIGHT),
-    L_STICK(Xbox.L_STICK),
-    R_STICK(Xbox.R_STICK),
+    BUTTON_A(Xbox.A),
+    BUTTON_B(Xbox.B),
+    BUTTON_X(Xbox.X),
+    BUTTON_Y(Xbox.Y),
+    BUTTON_GUIDE(Xbox.GUIDE),
+    BUTTON_L_BUMPER(Xbox.L_BUMPER),
+    BUTTON_R_BUMPER(Xbox.R_BUMPER),
+    BUTTON_BACK(Xbox.BACK),
+    BUTTON_START(Xbox.START),
+    BUTTON_DPAD_UP(Xbox.DPAD_UP),
+    BUTTON_DPAD_DOWN(Xbox.DPAD_DOWN),
+    BUTTON_DPAD_LEFT(Xbox.DPAD_LEFT),
+    BUTTON_DPAD_RIGHT(Xbox.DPAD_RIGHT),
+    BUTTON_L_STICK(Xbox.L_STICK),
+    BUTTON_R_STICK(Xbox.R_STICK),
     //D-pad
-    NORTH(PovDirection.north.ordinal()),
-    NORTH_EAST(PovDirection.northEast.ordinal()),
-    EAST(PovDirection.east.ordinal()),
-    SOUTH_EAST(PovDirection.southEast.ordinal()),
-    SOUTH(PovDirection.south.ordinal()),
-    SOUTH_WEST(PovDirection.southWest.ordinal()),
-    WEST(PovDirection.west.ordinal()),
-    NORTH_WEST(PovDirection.northWest.ordinal()),
-    CENTER(PovDirection.center.ordinal()),
+    DPAD_NORTH(PovDirection.north.ordinal()),
+    DPAD_NORTH_EAST(PovDirection.northEast.ordinal()),
+    DPAD_EAST(PovDirection.east.ordinal()),
+    DPAD_SOUTH_EAST(PovDirection.southEast.ordinal()),
+    DPAD_SOUTH(PovDirection.south.ordinal()),
+    DPAD_SOUTH_WEST(PovDirection.southWest.ordinal()),
+    DPAD_WEST(PovDirection.west.ordinal()),
+    DPAD_NORTH_WEST(PovDirection.northWest.ordinal()),
+    DPAD_CENTER(PovDirection.center.ordinal()),
     //Axis
-    L_TRIGGER(Xbox.L_TRIGGER),
-    R_TRIGGER(Xbox.R_TRIGGER),
-    L_STICK_VERTICAL_AXIS(Xbox.L_STICK_VERTICAL_AXIS),
-    L_STICK_HORIZONTAL_AXIS(Xbox.L_STICK_HORIZONTAL_AXIS),
-    R_STICK_VERTICAL_AXIS(Xbox.R_STICK_VERTICAL_AXIS),
-    R_STICK_HORIZONTAL_AXIS(Xbox.R_STICK_HORIZONTAL_AXIS),
+    AXIS_L_TRIGGER(Xbox.L_TRIGGER),
+    AXIS_R_TRIGGER(Xbox.R_TRIGGER),
+    AXIS_L_STICK_VERTICAL_AXIS(Xbox.L_STICK_VERTICAL_AXIS),
+    AXIS_L_STICK_HORIZONTAL_AXIS(Xbox.L_STICK_HORIZONTAL_AXIS),
+    AXIS_R_STICK_VERTICAL_AXIS(Xbox.R_STICK_VERTICAL_AXIS),
+    AXIS_R_STICK_HORIZONTAL_AXIS(Xbox.R_STICK_HORIZONTAL_AXIS),
     //just in case
     UNKNOWN(-1);
 
-    private static final List<ControllerItem> axis = new ArrayList<>(); // axis can share code with button
+    private static final Map<String, List<ControllerItem>> ControllerItemsByType;
 
     public final int code;
 
+
     static {
-        Arrays.stream(ControllerItem.values())
-                .filter(controllerItem -> controllerItem.name().contains("AXIS") || controllerItem.name().contains("TRIGGER"))
-                .forEach(controllerItem -> axis.add(controllerItem));
-        Gdx.app.log("axis", axis.toString());
+        ControllerItemsByType = Arrays.stream(ControllerItem.values())
+                .collect(Collectors.groupingBy(controllerItem -> controllerItem.name().split("_")[0]));
     }
 
 
@@ -62,18 +59,43 @@ public enum ControllerItem {
         this.code = code;
     }
 
-    public static ControllerItem valueOfCode(int code) {
-        return Stream.of(ControllerItem.values())
-                .filter(item -> code == item.code)
+    public static ControllerItem getButtonForCode(int code) {
+        return getButtons().stream()
+                .filter(controllerItem -> controllerItem.code == code)
                 .findAny()
                 .orElse(UNKNOWN);
     }
 
     public static ControllerItem getAxisForCode(int code) {
-        return axis.stream()
+        return getAxes().stream()
                 .filter(controllerItem -> controllerItem.code == code)
-                .findFirst()
+                .findAny()
                 .orElse(UNKNOWN);
+    }
+
+    public static ControllerItem getDpadDirectionForCode(int code) {
+        return getDPadControllerItems().stream()
+                .filter(controllerItem -> controllerItem.code == code)
+                .findAny()
+                .orElse(UNKNOWN);
+    }
+
+    private static ControllerItem getControllerItem(Stream<ControllerItem> controllerItems, int code) {
+        return controllerItems.filter(controllerItem -> controllerItem.code == code)
+                .findAny()
+                .orElse(UNKNOWN);
+    }
+
+    public static List<ControllerItem> getButtons() {
+        return ControllerItemsByType.get("BUTTON");
+    }
+
+    public static List<ControllerItem> getAxes() {
+        return ControllerItemsByType.get("AXIS");
+    }
+
+    public static List<ControllerItem> getDPadControllerItems() {
+        return ControllerItemsByType.get("DPAD");
     }
 
 }
