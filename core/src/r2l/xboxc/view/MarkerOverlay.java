@@ -1,5 +1,6 @@
 package r2l.xboxc.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -24,7 +25,8 @@ public class MarkerOverlay extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        IntStream.range(0, Controllers.getControllers().size)
+        IntStream.range(-Controllers.getControllers().size, 0)
+                .map(i -> -i -1) //reverse order
                 .forEach(this::drawMarkersForController);
     }
 
@@ -32,28 +34,6 @@ public class MarkerOverlay extends ScreenAdapter {
         Arrays.stream(ControllerItem.values())
                 .filter(controllerItem -> markerShouldBeDrawn(controllerIndex, controllerItem))
                 .forEach(controllerItem -> drawMarker(controllerIndex, MarkerOverlayHelper.getCalculatedCoordinates(controllerIndex, controllerItem)));
-    }
-
-    private boolean dontDrawTwoMarkersForASingleStickFilter() {
-        /*
-                horizontal axis     vertical axis       draw marker for vertical    draw marker for horizontal
-                    0                   0                       0                           0
-                    0                   1                       1                           0
-                    1                   0                       0                           1
-                    1                   1                       0                           1
-
-                    draw vertical = !horizontal + vertical
-                    draw horizontal = horizontal
-         */
-        return true;
-    }
-
-    private boolean isJoystickAndShouldDrawMarkerForVerticalAxis(int controllerIndex, ControllerItem controllerItem) {
-        return true;
-    }
-
-    private boolean isJoystickAndShouldDrawMarkerForHorizontalAxis(int controllerIndex, ControllerItem controllerItem) {
-        return true;
     }
 
     private void drawMarker(int controllerIndex, Point coordinates) {

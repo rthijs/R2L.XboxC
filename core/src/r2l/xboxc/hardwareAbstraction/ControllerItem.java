@@ -86,6 +86,13 @@ public enum ControllerItem {
                 .orElse(UNKNOWN);
     }
 
+    public static ControllerItem valueOfLabel(String name) {
+        return Arrays.stream(ControllerItem.values())
+                .filter(item -> item.name().equals(name))
+                .findAny()
+                .orElse(UNKNOWN);
+    }
+
     public static List<ControllerItem> getButtons() {
         return ControllerItemsByType.get("BUTTON");
     }

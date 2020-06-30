@@ -4,7 +4,6 @@ import r2l.xboxc.XboxControllerObservable;
 import r2l.xboxc.hardwareAbstraction.ControllerItem;
 
 import java.awt.*;
-import java.util.Optional;
 
 public class MarkerOverlayHelper {
 
@@ -13,62 +12,42 @@ public class MarkerOverlayHelper {
 
     public static boolean markerShouldBeDrawn(int controllerIndex, ControllerItem item) {
         return itemIsKnown(item)
-                && isPressedIfButton(item, controllerIndex)
-                && isNotCenteredIfDPadAndIsPressed(item, controllerIndex)
-                && isNotCenteredIfAxis(item, controllerIndex)
-                && markerMustBeDrawnForThisJoystickAxis(item, controllerIndex);
+                && conditionsAreMetIfButton(item, controllerIndex)
+                && conditionsAreMetIfDPad(item, controllerIndex)
+                && conditionsAreMetIfJoystick(item, controllerIndex)
+                && conditionsAreMetIfTrigger(item, controllerIndex);
     }
 
-    private static boolean markerMustBeDrawnForThisJoystickAxis(ControllerItem item, int controllerIndex) {
-        /*
-        Both joysticks have two axes, to prevent two markers from being drawn on top of each other
-        when both are not zero we must draw a single marker in every case except for when both are
-        zero.
-        let:
-            "draw vertical axis marker" = VM
-            "draw horizontal axis marker" = HM
-            "vertical axis value not zero" = V
-            "horizontal axis value not zero" = H
-        then:
-            VM = V
-            and
-            HM = H AND NOT V
-        truth table:
-                V       H       VM      HM          # of markers drawn
-                0       0       0       0               0
-                0       1       0       1               1
-                1       0       1       0               1
-                1       1       1       0               1
-         */
-        //TODO fix ugly code
-        return !isJoyStickAxis(item).isPresent()
-                ||
-                isJoyStickAxis(item)
-                .filter(joystickAxis -> axisMarkerMustBeDrawn(joystickAxis,controllerIndex))
-                .isPresent();
+    private static boolean conditionsAreMetIfTrigger(ControllerItem item, int controllerIndex) {
+        return !isTrigger(item) || isPressed(item, controllerIndex);
     }
 
-    private static Optional<ControllerItem> isJoyStickAxis(ControllerItem item) {
-        return ControllerItem.getAxes().stream()
-                .filter(controllerItem -> controllerItem.name().contains("STICK"))
-                .filter(controllerItem -> controllerItem.equals(item))
-                .findAny();
+    private static boolean conditionsAreMetIfJoystick(ControllerItem item, int controllerIndex) {
+        return !isJoyStickAxis(item) || axisMarkerMustBeDrawn(item, controllerIndex);
+    }
+
+    private static boolean conditionsAreMetIfDPad(ControllerItem item, int controllerIndex) {
+        return !isDPad(item) || (!isDPadCenter(item) && isPressed(item, controllerIndex));
+    }
+
+    private static boolean conditionsAreMetIfButton(ControllerItem item, int controllerIndex) {
+        return !isButton(item) || isPressed(item, controllerIndex);
+    }
+
+    private static boolean isJoyStickAxis(ControllerItem item) {
+        return item.name().contains("STICK");
     }
 
     private static boolean axisMarkerMustBeDrawn(ControllerItem controllerItem, int controllerIndex) {
         if (isHorizontalAxis(controllerItem)) {
             return hasAValue(controllerItem, controllerIndex) && !hasAValue(getVerticalAxisForHorizontal(controllerItem), controllerIndex);
         } else {
-            return !isCentered(controllerItem, controllerIndex);
+            return hasAValue(controllerItem, controllerIndex);
         }
-
     }
 
     private static ControllerItem getVerticalAxisForHorizontal(ControllerItem item) {
-        return ControllerItem.getAxes().stream()
-                .filter(axis -> axis.name().equals(getVerticalAxisName(item)))
-                .findAny()
-                .orElse(ControllerItem.UNKNOWN);
+        return ControllerItem.valueOfLabel(getVerticalAxisName(item));
     }
 
     private static String getVerticalAxisName(ControllerItem axis) {
@@ -83,28 +62,16 @@ public class MarkerOverlayHelper {
         return !item.equals(ControllerItem.UNKNOWN);
     }
 
-    private static boolean isPressedIfButton(ControllerItem item, int controllerIndex) {
-        return !isButton(item) || (isButton(item) && isPressed(item, controllerIndex));
-    }
-
-    private static boolean isNotCenteredIfAxis(ControllerItem item, int controllerIndex) {
-        return !isAxis(item) || (isAxis(item) && !isCentered(item, controllerIndex));
-    }
-
-    private static boolean isNotCenteredIfDPadAndIsPressed(ControllerItem item, int controllerIndex) {
-        return !isDPad(item) || (isDPad(item) && !isDPadCenter(item) && isPressed(item, controllerIndex));
-    }
-
     private static boolean isButton(ControllerItem item) {
         return ControllerItem.getButtons().stream().anyMatch(i -> i.equals(item));
     }
 
-    private static boolean isAxis(ControllerItem item) {
-        return ControllerItem.getAxes().stream().anyMatch(i -> i.equals(item));
-    }
-
     private static boolean isDPad(ControllerItem item) {
         return ControllerItem.getDPadControllerItems().stream().anyMatch(i -> i.equals(item));
+    }
+
+    private static boolean isTrigger(ControllerItem item) {
+        return item.name().contains("TRIGGER");
     }
 
     private static boolean isPressed(ControllerItem item, int controllerIndex) {
@@ -113,10 +80,6 @@ public class MarkerOverlayHelper {
 
     private static boolean isDPadCenter(ControllerItem item) {
         return item.equals(ControllerItem.DPAD_CENTER);
-    }
-
-    private static boolean isCentered(ControllerItem item, int controllerIndex) {
-        return !isControllerItemValueGreaterThanThreshold(item, controllerIndex);
     }
 
     private static boolean hasAValue(ControllerItem item, int controllerIndex) {
@@ -129,6 +92,9 @@ public class MarkerOverlayHelper {
 
     public static Point getCalculatedCoordinates(int controllerIndex, ControllerItem item) {
         //TODO calculate adjusted position for marker
-        return HardwareCoordinates.getCoordinates(item);
+        Point defaultCoordinates = HardwareCoordinates.getCoordinates(item);
+        int newX = defaultCoordinates.x + (int) Math.round(Math.random() * 2 * controllerIndex) - controllerIndex;
+        int newY = defaultCoordinates.y + (int) Math.round(Math.random() * 2 * controllerIndex) - controllerIndex;
+        return new Point(newX, newY);
     }
 }
