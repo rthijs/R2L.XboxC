@@ -80,12 +80,6 @@ public enum ControllerItem {
                 .orElse(UNKNOWN);
     }
 
-    private static ControllerItem getControllerItem(Stream<ControllerItem> controllerItems, int code) {
-        return controllerItems.filter(controllerItem -> controllerItem.code == code)
-                .findAny()
-                .orElse(UNKNOWN);
-    }
-
     public static ControllerItem valueOfLabel(String name) {
         return Arrays.stream(ControllerItem.values())
                 .filter(item -> item.name().equals(name))

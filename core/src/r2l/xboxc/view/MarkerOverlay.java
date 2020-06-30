@@ -1,6 +1,5 @@
 package r2l.xboxc.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -16,7 +15,6 @@ import static r2l.xboxc.view.MarkerOverlayHelper.markerShouldBeDrawn;
 public class MarkerOverlay extends ScreenAdapter {
 
     private static Batch batch;
-    private static final XboxControllerObservable xBoxControllerObservable = XboxControllerObservable.getInstance();
 
     public MarkerOverlay(Batch batch) {
         XboxControllerObserver.getInstance();

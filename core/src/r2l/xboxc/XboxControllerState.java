@@ -10,7 +10,7 @@ public class XboxControllerState {
 
     private static final Float INITIAL_VALUE = 0f;
     private final int controllerIndex;
-    private Map<ControllerItem, Float> CURRENT_CONTROLLER_STATE = new HashMap<>();
+    private final Map<ControllerItem, Float> CURRENT_CONTROLLER_STATE = new HashMap<>();
 
     public XboxControllerState(int controllerIndex) {
         this.controllerIndex = controllerIndex;
