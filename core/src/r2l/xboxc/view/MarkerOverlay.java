@@ -3,7 +3,6 @@ package r2l.xboxc.view;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import r2l.xboxc.XboxControllerObservable;
 import r2l.xboxc.hardwareAbstraction.ControllerItem;
 
 import java.awt.*;
@@ -23,8 +22,7 @@ public class MarkerOverlay extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        IntStream.range(-Controllers.getControllers().size, 0)
-                .map(i -> -i -1) //reverse order
+        IntStream.range(0, Controllers.getControllers().size)
                 .forEach(this::drawMarkersForController);
     }
 

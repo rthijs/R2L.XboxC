@@ -9,6 +9,7 @@ public class MarkerOverlayHelper {
 
     private static final XboxControllerObservable XBOX_CONTROLLER_OBSERVABLE = XboxControllerObservable.getInstance();
     private static final float THRESHOLD_NO_VALUE = 0.005f; //for decent xbox 360 controllers set this to .00005, for cheap chinese SNES controllers use .005
+    private static final float TRIGGER_UNPRESSED_VALUE = -1f;
 
     public static boolean markerShouldBeDrawn(int controllerIndex, ControllerItem item) {
         return itemIsKnown(item)
@@ -75,6 +76,9 @@ public class MarkerOverlayHelper {
     }
 
     private static boolean isPressed(ControllerItem item, int controllerIndex) {
+        if (isTrigger(item)) {
+            return XBOX_CONTROLLER_OBSERVABLE.getControllerItemValue(controllerIndex, item) > TRIGGER_UNPRESSED_VALUE;
+        }
         return isControllerItemValueGreaterThanThreshold(item, controllerIndex);
     }
 
@@ -91,10 +95,8 @@ public class MarkerOverlayHelper {
     }
 
     public static Point getCalculatedCoordinates(int controllerIndex, ControllerItem item) {
-        //TODO calculate adjusted position for marker
-        Point defaultCoordinates = HardwareCoordinates.getCoordinates(item);
-        int newX = defaultCoordinates.x + (int) Math.round(Math.random() * 2 * controllerIndex) - controllerIndex;
-        int newY = defaultCoordinates.y + (int) Math.round(Math.random() * 2 * controllerIndex) - controllerIndex;
-        return new Point(newX, newY);
+        return MarkerCoordinateCalculator.getCalculatedCoordinates(item, controllerIndex);
     }
+
 }
+

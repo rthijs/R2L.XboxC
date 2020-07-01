@@ -5,7 +5,6 @@ import com.badlogic.gdx.controllers.mappings.Xbox;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public enum ControllerItem {
     //buttons
@@ -44,16 +43,14 @@ public enum ControllerItem {
     //just in case
     UNKNOWN(-1);
 
-    private static final Map<String, List<ControllerItem>> ControllerItemsByType;
+    private static final Map<String, List<ControllerItem>> CONTROLLER_ITEMS_BY_TYPE;
 
     public final int code;
 
-
     static {
-        ControllerItemsByType = Arrays.stream(ControllerItem.values())
+        CONTROLLER_ITEMS_BY_TYPE = Arrays.stream(ControllerItem.values())
                 .collect(Collectors.groupingBy(controllerItem -> controllerItem.name().split("_")[0]));
     }
-
 
     ControllerItem(int code) {
         this.code = code;
@@ -80,6 +77,14 @@ public enum ControllerItem {
                 .orElse(UNKNOWN);
     }
 
+    /**
+     *
+     * Use this instead of the normal enum.getValueOf as valueOfLabel
+     * will return the UNKNOWN controllerItem and not null.
+     *
+     * @param name the label of the ControllerItem
+     * @return the controller item with the given name
+     */
     public static ControllerItem valueOfLabel(String name) {
         return Arrays.stream(ControllerItem.values())
                 .filter(item -> item.name().equals(name))
@@ -88,15 +93,15 @@ public enum ControllerItem {
     }
 
     public static List<ControllerItem> getButtons() {
-        return ControllerItemsByType.get("BUTTON");
+        return CONTROLLER_ITEMS_BY_TYPE.get("BUTTON");
     }
 
     public static List<ControllerItem> getAxes() {
-        return ControllerItemsByType.get("AXIS");
+        return CONTROLLER_ITEMS_BY_TYPE.get("AXIS");
     }
 
     public static List<ControllerItem> getDPadControllerItems() {
-        return ControllerItemsByType.get("DPAD");
+        return CONTROLLER_ITEMS_BY_TYPE.get("DPAD");
     }
 
 }
