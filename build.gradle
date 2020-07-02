@@ -1,5 +1,5 @@
 buildscript {
-    
+
 
     repositories {
         mavenLocal()
@@ -10,7 +10,6 @@ buildscript {
         google()
     }
     dependencies {
-        
 
     }
 }
@@ -49,7 +48,7 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
-        
+
     }
 }
 
@@ -60,9 +59,11 @@ project(":core") {
     dependencies {
         api "junit:junit:4.11+"
         api "org.hamcrest:hamcrest:2.2"
+        api "org.mockito:mockito-core:2.+"
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-        
+
     }
 }
+
