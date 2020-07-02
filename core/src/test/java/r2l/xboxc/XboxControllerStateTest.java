@@ -6,6 +6,9 @@ import r2l.xboxc.hardwareAbstraction.ControllerItem;
 import java.util.Arrays;
 import java.util.Random;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 public class XboxControllerStateTest {
 
     private final static int CONTROLLER_INDEX = 123;
@@ -15,7 +18,7 @@ public class XboxControllerStateTest {
 
     @Test
     public void getControllerIndex_shouldReturnValue() {
-        assert xboxControllerState.getControllerIndex() == CONTROLLER_INDEX;
+        assertThat(xboxControllerState.getControllerIndex(), is(CONTROLLER_INDEX));
     }
 
     @Test
@@ -25,7 +28,7 @@ public class XboxControllerStateTest {
                 .map(item -> xboxControllerState.getCurrentValue(item))
                 .filter(value -> value != DEFAULT_VALUE)
                 .count();
-        assert nonDefaultValueCount == 0l;
+        assertThat(nonDefaultValueCount, is(0l));
     }
 
     @Test
@@ -35,7 +38,7 @@ public class XboxControllerStateTest {
                 .map(item -> xboxControllerState.getCurrentValue(item))
                 .filter(value -> value != DEFAULT_VALUE_TRIGGERS)
                 .count();
-        assert nonDefaultValueCount == 0l;
+        assertThat(nonDefaultValueCount, is(0l));
     }
 
     @Test
@@ -44,6 +47,6 @@ public class XboxControllerStateTest {
         //ControllerItem item = ControllerItem.values()[0];
         float value = (float) Math.random();
         xboxControllerState.setValue(item, value);
-        assert xboxControllerState.getCurrentValue(item) == value;
+        assertThat(xboxControllerState.getCurrentValue(item), is(value));
     }
 }
