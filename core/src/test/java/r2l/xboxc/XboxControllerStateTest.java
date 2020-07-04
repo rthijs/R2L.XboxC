@@ -28,7 +28,7 @@ public class XboxControllerStateTest {
                 .map(item -> xboxControllerState.getCurrentValue(item))
                 .filter(value -> value != DEFAULT_VALUE)
                 .count();
-        assertThat(nonDefaultValueCount, is(0l));
+        assertThat("Should return default value.",nonDefaultValueCount, is(0l));
     }
 
     @Test
@@ -38,7 +38,7 @@ public class XboxControllerStateTest {
                 .map(item -> xboxControllerState.getCurrentValue(item))
                 .filter(value -> value != DEFAULT_VALUE_TRIGGERS)
                 .count();
-        assertThat(nonDefaultValueCount, is(0l));
+        assertThat("Should return defautl value for triggers.", nonDefaultValueCount, is(0l));
     }
 
     @Test
@@ -47,6 +47,6 @@ public class XboxControllerStateTest {
         //ControllerItem item = ControllerItem.values()[0];
         float value = (float) Math.random();
         xboxControllerState.setValue(item, value);
-        assertThat(xboxControllerState.getCurrentValue(item), is(value));
+        assertThat("Should set value.", xboxControllerState.getCurrentValue(item), is(value));
     }
 }
