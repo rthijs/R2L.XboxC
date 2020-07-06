@@ -9,26 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public final class XboxControllerObservable {
+public class XboxControllerObservable {
 
-    private static final List<XboxControllerState> XBOX_CONTROLLER_STATES = new ArrayList<>();
-    private static XboxControllerObservable instance;
+    private final List<XboxControllerState> XBOX_CONTROLLER_STATES = new ArrayList<>();
     private final PropertyChangeSupport support;
 
-    static {
-        IntStream.range(0, Controllers.getControllers().size)
-                .forEach(i -> XBOX_CONTROLLER_STATES.add(new XboxControllerState(i)));
-    }
-
-    private XboxControllerObservable() {
+    public XboxControllerObservable() {
         support = new PropertyChangeSupport(this);
-    }
-
-    public static XboxControllerObservable getInstance() {
-        if (instance == null) {
-            instance = new XboxControllerObservable();
-        }
-        return instance;
+        IntStream.range(0, numberOfControllers()).forEach(i -> XBOX_CONTROLLER_STATES.add(new XboxControllerState(i)));
     }
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
@@ -51,5 +39,9 @@ public final class XboxControllerObservable {
                 .findFirst()
                 .map(xboxControllerState -> xboxControllerState.getCurrentValue(item))
                 .orElse(0f);
+    }
+
+    protected int numberOfControllers() {
+        return Controllers.getControllers().size;
     }
 }

@@ -3,21 +3,25 @@ package r2l.xboxc.view;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import r2l.xboxc.XboxControllerObservable;
 import r2l.xboxc.hardwareAbstraction.ControllerItem;
 
 import java.awt.*;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-import static r2l.xboxc.view.MarkerOverlayHelper.markerShouldBeDrawn;
-
 public class MarkerOverlay extends ScreenAdapter {
 
-    private static Batch batch;
+    private final Batch batch;
+    private final MarkerOverlayHelper helper;
 
-    public MarkerOverlay(Batch batch) {
-        XboxControllerObserver.getInstance();
-        MarkerOverlay.batch = batch;
+    public MarkerOverlay(Batch batch, XboxControllerObservable observable) {
+        this.batch = batch;
+        this.helper = getMarkerOverlayHelper(observable);
+    }
+
+    protected MarkerOverlayHelper getMarkerOverlayHelper(XboxControllerObservable observable) {
+        return new MarkerOverlayHelper(observable);
     }
 
     @Override
@@ -28,8 +32,8 @@ public class MarkerOverlay extends ScreenAdapter {
 
     private void drawMarkersForController(int controllerIndex) {
         Arrays.stream(ControllerItem.values())
-                .filter(controllerItem -> markerShouldBeDrawn(controllerIndex, controllerItem))
-                .forEach(controllerItem -> drawMarker(controllerIndex, MarkerOverlayHelper.getCalculatedCoordinates(controllerIndex, controllerItem)));
+                .filter(controllerItem -> helper.markerShouldBeDrawn(controllerIndex, controllerItem))
+                .forEach(controllerItem -> drawMarker(controllerIndex, helper.getCalculatedCoordinates(controllerIndex, controllerItem)));
     }
 
     private void drawMarker(int controllerIndex, Point coordinates) {

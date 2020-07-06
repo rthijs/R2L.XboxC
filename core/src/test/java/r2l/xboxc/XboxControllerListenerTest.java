@@ -20,7 +20,7 @@ public class XboxControllerListenerTest {
     private static final float BUTTON_PRESSED = 1F;
     private static final float BUTTON_RELEASED = 0F;
     private static final AtomicInteger CONTROLLER_INDEX = new AtomicInteger(123);
-    private static final XboxControllerObservable OBSERVABLE = XboxControllerObservable.getInstance();
+    private XboxControllerObservable xboxControllerObservable;
     private XboxControllerListener xboxControllerListener;
     @Mock
     private Controller controller;
@@ -29,13 +29,15 @@ public class XboxControllerListenerTest {
 
     @Before
     public void setup() {
-        xboxControllerListener = new XboxControllerListener(CONTROLLER_INDEX.getAndIncrement());
+        xboxControllerObservable = new XboxControllerObservable();
+        xboxControllerListener = new XboxControllerListener(CONTROLLER_INDEX.getAndIncrement(), xboxControllerObservable);
+
         when(Controllers.getControllers()).thenReturn(new Array<>());
     }
     @Test
     public void buttonDown_shouldUpdateStateObservable() {
         xboxControllerListener.buttonDown(controller, Xbox.A);
-        Float value = OBSERVABLE.getControllerItemValue(CONTROLLER_INDEX.get(), ControllerItem.BUTTON_A);
+        Float value = xboxControllerObservable.getControllerItemValue(CONTROLLER_INDEX.get(), ControllerItem.BUTTON_A);
         assertThat("Value when button pressed should be 1", value, is(BUTTON_PRESSED));
     }
 }

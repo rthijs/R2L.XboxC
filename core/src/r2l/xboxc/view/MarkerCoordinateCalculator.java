@@ -11,22 +11,22 @@ import static java.lang.StrictMath.*;
 
 public class MarkerCoordinateCalculator {
 
-    private static final XboxControllerObservable XBOX_CONTROLLER_OBSERVABLE = XboxControllerObservable.getInstance();
-
     private final static int WIGGLE_AMOUNT = 6;
     private final static int MAX_REACH_JOYSTICK = 50;
     private final static int MAX_REACH_TRIGGER = 50;
 
-    private static final Map<String, java.util.List<ControllerItem>> ALL_AXIS;
+    private final XboxControllerObservable observable;
+    private final Map<String, java.util.List<ControllerItem>> ALL_AXIS;
 
-    static {
+    public MarkerCoordinateCalculator(XboxControllerObservable observable) {
+        this.observable = observable;
         ALL_AXIS = ControllerItem.getAxes().stream().collect(Collectors.groupingBy(controllerItem -> controllerItem.name().split("_")[2]));
     }
 
-    public static Point getCalculatedCoordinates(ControllerItem item, int controllerIndex) {
+    public Point getCalculatedCoordinates(ControllerItem item, int controllerIndex) {
 
         Point baseCoordinates = HardwareCoordinates.getCoordinates(item);
-        float value = XBOX_CONTROLLER_OBSERVABLE.getControllerItemValue(controllerIndex, item);
+        float value = observable.getControllerItemValue(controllerIndex, item);
         CoordinateCalculation coordinateCalculation = new ButtonCoordinateCalculation(); //default to Button as it is used for buttons and dpad directions
 
         if (ALL_AXIS.get("TRIGGER").contains(item)) {
@@ -66,7 +66,7 @@ public class MarkerCoordinateCalculator {
         }
     }
 
-    private static class JoyStickCoordinateCalculation implements CoordinateCalculation {
+    private class JoyStickCoordinateCalculation implements CoordinateCalculation {
 
         private final float horizontalValue;
         private final float verticalValue;
@@ -76,8 +76,8 @@ public class MarkerCoordinateCalculator {
             String verticalAxisName = item.name().replace("HORIZONTAL", "VERTICAL");
             ControllerItem horizontalAxis = ControllerItem.valueOfLabel(horizontalAxisName);
             ControllerItem verticalAxis = ControllerItem.valueOfLabel(verticalAxisName);
-            horizontalValue = XBOX_CONTROLLER_OBSERVABLE.getControllerItemValue(controllerIndex, horizontalAxis);
-            verticalValue = XBOX_CONTROLLER_OBSERVABLE.getControllerItemValue(controllerIndex, verticalAxis);
+            horizontalValue = observable.getControllerItemValue(controllerIndex, horizontalAxis);
+            verticalValue = observable.getControllerItemValue(controllerIndex, verticalAxis);
         }
 
         @Override

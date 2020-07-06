@@ -8,22 +8,20 @@ public class XboxControllerObservableTest {
 
     @Test
     public void testTest() {
-        //XboxControllerObservable xboxControllerObservable = new DummyXboxControllerObservable();
+        XboxControllerObservable xboxControllerObservable = new XboxControllerObservableForTesting();
 
 
-        //assert  xboxControllerObservable != null;
+        assert  xboxControllerObservable != null;
 
     }
 
-/*
 
-    class DummyXboxControllerObservable extends XboxControllerObservable {
+    class XboxControllerObservableForTesting extends XboxControllerObservable {
 
         @Override
-        protected int getNumberOfConnectedControllers() {
+        protected int numberOfControllers() {
             return NUMBER_OF_CONTROLLERS;
         }
     }
 
- */
 }

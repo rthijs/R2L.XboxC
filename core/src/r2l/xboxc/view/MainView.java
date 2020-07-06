@@ -3,32 +3,38 @@ package r2l.xboxc.view;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import r2l.xboxc.XboxControllerObservable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainView extends ScreenAdapter {
 
-    private static final Batch SPRITE_BATCH = new SpriteBatch();
-    private static final List<ScreenAdapter> SCREEN_ADAPTERS = new ArrayList<>();
+    private final Batch batch;
+    private final List<ScreenAdapter> screenAdapters = new ArrayList<>();
 
-    static {
-        SCREEN_ADAPTERS.add(new BackGround(SPRITE_BATCH));
-        SCREEN_ADAPTERS.add(new XboxControllerImage(SPRITE_BATCH));
-        SCREEN_ADAPTERS.add(new XboxControllerOverlay(SPRITE_BATCH));
-        SCREEN_ADAPTERS.add(new MarkerOverlay(SPRITE_BATCH));
+    public MainView(XboxControllerObservable observable) {
+        this.batch = getSpriteBatch();
+        screenAdapters.add(new BackGround(batch));
+        screenAdapters.add(new XboxControllerImage(batch));
+        screenAdapters.add(new XboxControllerOverlay(batch));
+        screenAdapters.add(new MarkerOverlay(batch, observable));
+    }
+
+    protected SpriteBatch getSpriteBatch() {
+        return new SpriteBatch();
     }
 
     @Override
     public void render(float delta) {
-        SPRITE_BATCH.begin();
-        SCREEN_ADAPTERS.forEach(screenAdapter -> screenAdapter.render(delta));
-        SPRITE_BATCH.end();
+        batch.begin();
+        screenAdapters.forEach(screenAdapter -> screenAdapter.render(delta));
+        batch.end();
     }
 
     @Override
     public void dispose() {
-        SCREEN_ADAPTERS.forEach(ScreenAdapter::dispose);
-        SPRITE_BATCH.dispose();
+        screenAdapters.forEach(ScreenAdapter::dispose);
+        batch.dispose();
     }
 }

@@ -6,17 +6,30 @@ import com.badlogic.gdx.controllers.Controllers;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 public class XboxControllerHelper {
-    private static final AtomicInteger CONTROLLER_INDEX = new AtomicInteger();
 
-    public static void addListenerToEveryController() {
-        Arrays.stream(Controllers.getControllers().toArray())
-                .forEach(XboxControllerHelper::addListenerToController);
+    private final AtomicInteger controllerIndex = new AtomicInteger();
+    private final XboxControllerObservable observable;
+
+    public XboxControllerHelper(XboxControllerObservable observable) {
+        this.observable = observable;
     }
 
-    private static void addListenerToController(Controller controller) {
-        Gdx.app.log("Listener added to controller " + CONTROLLER_INDEX.get() , controller.getName());
-        controller.addListener(new XboxControllerListener(CONTROLLER_INDEX.getAndIncrement()));
+    public void addListenerToEveryController() {
+        getControllers().forEach(controller -> addListenerToController(controller));
+    }
+
+    private void addListenerToController(Controller controller) {
+        controller.addListener(getXboxControllerListener());
+    }
+
+    protected Stream<Controller> getControllers() {
+        return Arrays.stream(Controllers.getControllers().toArray());
+    }
+
+    protected XboxControllerListener getXboxControllerListener() {
+        return new XboxControllerListener(controllerIndex.getAndIncrement(), observable);
     }
 }

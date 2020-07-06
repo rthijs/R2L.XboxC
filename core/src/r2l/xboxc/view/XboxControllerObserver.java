@@ -9,17 +9,8 @@ import java.beans.PropertyChangeListener;
 
 public class XboxControllerObserver implements PropertyChangeListener {
 
-    private static XboxControllerObserver instance;
-
-    private XboxControllerObserver() {
-        XboxControllerObservable.getInstance().addPropertyChangeListener(this);
-    }
-
-    public static XboxControllerObserver getInstance() {
-        if (instance == null) {
-            instance = new XboxControllerObserver();
-        }
-        return instance;
+    public XboxControllerObserver(XboxControllerObservable observable) {
+        observable.addPropertyChangeListener(this);
     }
 
     @Override
