@@ -6,39 +6,41 @@ import r2l.xboxc.view.MainView;
 
 public class Main extends ApplicationAdapter {
 
-	private MainView mainView;
-	private XboxControllerHelper helper;
-	private XboxControllerObservable observable;
+    private MainView mainView;
+    private XboxControllerObservable observable;
 
-	@Override
-	public void create() {
-		mainView = getMainView();
-		helper = getXboxControllerHelper();
-		helper.addListenerToEveryController();
-		observable = getXboxControllerObservable();
-	}
+    @Override
+    public void create() {
+        observable = getXboxControllerObservable();
+        mainView = getMainView();
+        getXboxControllerHelper().addListenerToEveryController();
+    }
 
-	protected MainView getMainView() {
-		return new MainView(observable);
-	}
+    protected MainView getMainView() {
+        return new MainView(observable);
+    }
 
-	protected  XboxControllerHelper getXboxControllerHelper() {
-		return new XboxControllerHelper(observable);
-	}
+    protected XboxControllerHelper getXboxControllerHelper() {
+        return new XboxControllerHelper(observable);
+    }
 
-	protected XboxControllerObservable getXboxControllerObservable() {
-		return new XboxControllerObservable();
-	}
+    protected XboxControllerObservable getXboxControllerObservable() {
+        return new XboxControllerObservable();
+    }
 
-	@Override
-	public void render() {
-		mainView.render(Gdx.graphics.getDeltaTime());
-	}
+    @Override
+    public void render() {
+        mainView.render(getDeltaTime());
+    }
 
-	@Override
-	public void dispose() {
-		mainView.dispose();
-	}
+    @Override
+    public void dispose() {
+        mainView.dispose();
+    }
+
+    protected float getDeltaTime() {
+        return Gdx.graphics.getDeltaTime();
+    }
 
 
 }

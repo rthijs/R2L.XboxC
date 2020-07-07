@@ -1,6 +1,5 @@
 package r2l.xboxc;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 
@@ -18,7 +17,7 @@ public class XboxControllerHelper {
     }
 
     public void addListenerToEveryController() {
-        getControllers().forEach(controller -> addListenerToController(controller));
+        getControllers().forEach(this::addListenerToController);
     }
 
     private void addListenerToController(Controller controller) {

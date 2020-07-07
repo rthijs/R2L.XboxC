@@ -20,7 +20,7 @@ public class XboxControllerObserver implements PropertyChangeListener {
         float oldValue = (float) propertyChangeEvent.getOldValue();
         String item = propertyChangeEvent.getPropertyName();
         Gdx.app.log(controllerIndex + ":" + item , oldValue + " -> " + newValue );
-        //TODO heb ik dit wel nodig?
+        //TODO not needed?
     }
 
 

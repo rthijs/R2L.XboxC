@@ -12,11 +12,11 @@ import static org.hamcrest.Matchers.is;
 
 public class ControllerItemTest {
 
-    private static int INVALID_CODE = 123456789;
+    private static final int INVALID_CODE = 123456789;
 
     @Test
     public void requestingControllerItemForUnknownLabelShouldReturnUNKNOWN() {
-        ControllerItem item = ControllerItem.valueOfLabel("BLABLA");
+        ControllerItem item = ControllerItem.valueOfLabel("INVALID_LABEL");
         assertThat("Invalid label should return UNKNOWN ControllerItem.", item, is(ControllerItem.UNKNOWN));
     }
 

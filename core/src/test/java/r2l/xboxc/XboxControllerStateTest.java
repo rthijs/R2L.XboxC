@@ -14,7 +14,7 @@ public class XboxControllerStateTest {
     private final static int CONTROLLER_INDEX = 123;
     private final static float DEFAULT_VALUE = 0f;
     private final static float DEFAULT_VALUE_TRIGGERS = -1f;
-    XboxControllerState xboxControllerState = new XboxControllerState(CONTROLLER_INDEX);
+    final XboxControllerState xboxControllerState = new XboxControllerState(CONTROLLER_INDEX);
 
     @Test
     public void getControllerIndex_shouldReturnValue() {
@@ -25,20 +25,20 @@ public class XboxControllerStateTest {
     public void getCurrentValue_shouldReturnDefaultValue_exceptForTriggers() {
         long nonDefaultValueCount = Arrays.stream(ControllerItem.values())
                 .filter(item -> !item.name().contains("TRIGGER"))
-                .map(item -> xboxControllerState.getCurrentValue(item))
+                .map(xboxControllerState::getCurrentValue)
                 .filter(value -> value != DEFAULT_VALUE)
                 .count();
-        assertThat("Should return default value.",nonDefaultValueCount, is(0l));
+        assertThat("Should return default value.",nonDefaultValueCount, is(0L));
     }
 
     @Test
     public void getCurrentValue_shouldReturnDefaultValue_forTriggers() {
         long nonDefaultValueCount = Arrays.stream(ControllerItem.values())
                 .filter(item -> item.name().contains("TRIGGER"))
-                .map(item -> xboxControllerState.getCurrentValue(item))
+                .map(xboxControllerState::getCurrentValue)
                 .filter(value -> value != DEFAULT_VALUE_TRIGGERS)
                 .count();
-        assertThat("Should return defautl value for triggers.", nonDefaultValueCount, is(0l));
+        assertThat("Should return default value for triggers.", nonDefaultValueCount, is(0L));
     }
 
     @Test
