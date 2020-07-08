@@ -15,8 +15,16 @@ public class XboxControllerObservable {
     private final PropertyChangeSupport support;
 
     public XboxControllerObservable() {
-        support = new PropertyChangeSupport(this);
+        support = getSupport();
         IntStream.range(0, numberOfControllers()).forEach(i -> XBOX_CONTROLLER_STATES.add(new XboxControllerState(i)));
+    }
+
+    protected PropertyChangeSupport getSupport() {
+        return new PropertyChangeSupport(this);
+    }
+
+    protected int numberOfControllers() {
+        return Controllers.getControllers().size;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
@@ -38,10 +46,6 @@ public class XboxControllerObservable {
                 .filter(xboxControllerState -> xboxControllerState.getControllerIndex() == controllerIndex)
                 .findFirst()
                 .map(xboxControllerState -> xboxControllerState.getCurrentValue(item))
-                .orElse(0f);
-    }
-
-    protected int numberOfControllers() {
-        return Controllers.getControllers().size;
+                .orElse(0F);
     }
 }
