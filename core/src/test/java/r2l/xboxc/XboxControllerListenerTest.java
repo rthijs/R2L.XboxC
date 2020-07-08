@@ -64,7 +64,6 @@ public class XboxControllerListenerTest {
     @Test
     public void povMoved_shouldReleaseAllDPadDirections() {
         int povCode = Xbox.DPAD_UP;
-        ControllerItem povDirection = ControllerItem.DPAD_NORTH;
         xboxControllerListener.povMoved(mockController, povCode, PovDirection.north);
         ControllerItem.getDPadControllerItems()
                 .forEach(controllerItem -> verify(mockObservable, times(1)).setControllerItemValue(CONTROLLER_INDEX, controllerItem, BUTTON_RELEASED));
