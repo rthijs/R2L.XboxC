@@ -29,6 +29,10 @@ public class XboxControllerHelper {
     }
 
     protected XboxControllerListener getXboxControllerListener() {
-        return new XboxControllerListener(controllerIndex.getAndIncrement(), observable);
+        return new XboxControllerListener(getControllerIndex(), observable);
+    }
+
+    protected int getControllerIndex() {
+        return controllerIndex.getAndIncrement();
     }
 }
