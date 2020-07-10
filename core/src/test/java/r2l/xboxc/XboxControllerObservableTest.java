@@ -58,14 +58,6 @@ public class XboxControllerObservableTest {
         assertThat("getControllerItemValue should return updated value", actual, is(expected));
     }
 
-
-
-
-
-
-
-
-
     private class XboxControllerObservableForTesting extends XboxControllerObservable {
 
         @Override

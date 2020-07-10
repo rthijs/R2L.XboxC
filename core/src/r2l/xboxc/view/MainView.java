@@ -1,5 +1,6 @@
 package r2l.xboxc.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,7 +16,7 @@ public class MainView extends ScreenAdapter {
 
     public MainView(XboxControllerObservable observable) {
         this.batch = getSpriteBatch();
-        screenAdapters.add(new BackGround(batch));
+        screenAdapters.add(new BackGround(batch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         screenAdapters.add(new XboxControllerImage(batch));
         screenAdapters.add(new XboxControllerOverlay(batch));
         screenAdapters.add(new MarkerOverlay(batch, observable));
