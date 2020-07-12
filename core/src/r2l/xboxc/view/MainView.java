@@ -1,9 +1,7 @@
 package r2l.xboxc.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import r2l.xboxc.XboxControllerObservable;
 
 import java.util.ArrayList;
@@ -14,16 +12,13 @@ public class MainView extends ScreenAdapter {
     private final Batch batch;
     private final List<ScreenAdapter> screenAdapters = new ArrayList<>();
 
-    public MainView(XboxControllerObservable observable) {
-        this.batch = getSpriteBatch();
-        screenAdapters.add(new BackGround(batch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        screenAdapters.add(new XboxControllerImage(batch));
-        screenAdapters.add(new XboxControllerOverlay(batch));
-        screenAdapters.add(new MarkerOverlay(batch, observable));
-    }
-
-    protected SpriteBatch getSpriteBatch() {
-        return new SpriteBatch();
+    public MainView(XboxControllerObservable observable, Batch batch) {
+        this.batch = batch;
+        MainViewHelper helper = getMainViewHelper(batch, observable);
+        screenAdapters.add(helper.getBackGround());
+        screenAdapters.add(helper.getXboxControllerImage());
+        screenAdapters.add(helper.getXboxControllerOverlay());
+        screenAdapters.add(helper.getMarkerOverlay());
     }
 
     @Override
@@ -37,5 +32,9 @@ public class MainView extends ScreenAdapter {
     public void dispose() {
         screenAdapters.forEach(ScreenAdapter::dispose);
         batch.dispose();
+    }
+
+    protected MainViewHelper getMainViewHelper(Batch batch, XboxControllerObservable observable) {
+        return new MainViewHelper(batch, observable);
     }
 }

@@ -2,6 +2,7 @@ package r2l.xboxc;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import r2l.xboxc.view.MainView;
 
 public class Main extends ApplicationAdapter {
@@ -17,7 +18,7 @@ public class Main extends ApplicationAdapter {
     }
 
     protected MainView getMainView() {
-        return new MainView(observable);
+        return new MainView(observable, new SpriteBatch());
     }
 
     protected XboxControllerHelper getXboxControllerHelper() {
