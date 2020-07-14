@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 public class XboxControllerImage extends ScreenAdapter {
 
-    private static final Texture xBox360ControllerImage = new Texture("360Controller.png");
-    private static Batch batch;
+    private final Texture xBox360ControllerImage = new Texture("360Controller.png");
+    private Batch batch;
 
     public XboxControllerImage(Batch batch) {
-        XboxControllerImage.batch = batch;
+        this.batch = batch;
     }
 
     @Override

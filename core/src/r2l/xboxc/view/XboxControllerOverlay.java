@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 public class XboxControllerOverlay extends ScreenAdapter {
-    private static final Texture xBox360ControllerOverlay = new Texture("360ControllerOverlay.png");
-    private static Batch batch;
+    private final Texture xBox360ControllerOverlay = new Texture("360ControllerOverlay.png");
+    private Batch batch;
 
     public XboxControllerOverlay(Batch batch) {
-        XboxControllerOverlay.batch = batch;
+        this.batch = batch;
     }
 
     @Override
@@ -21,4 +21,5 @@ public class XboxControllerOverlay extends ScreenAdapter {
     public void dispose() {
         xBox360ControllerOverlay.dispose();
     }
+
 }
