@@ -40,7 +40,7 @@ public class MarkerOverlayHelper {
     }
 
     private boolean conditionsAreMetIfDPad(ControllerItem item, int controllerIndex) {
-        return !isDPad(item) || (!isDPadCenter(item) && isPressed(item, controllerIndex));
+        return !isDPad(item) || isPressed(item, controllerIndex);
     }
 
     private boolean conditionsAreMetIfButton(ControllerItem item, int controllerIndex) {
@@ -89,16 +89,9 @@ public class MarkerOverlayHelper {
 
     private boolean isPressed(ControllerItem item, int controllerIndex) {
         if (isTrigger(item)) {
-        	System.out.println("is trigger: " + xboxControllerObservable.getControllerItemValue(controllerIndex, item));
             return xboxControllerObservable.getControllerItemValue(controllerIndex, item) > TRIGGER_UNPRESSED_VALUE;
         }
         return isControllerItemValueGreaterThanThreshold(item, controllerIndex);
-    }
-
-    private static boolean isDPadCenter(ControllerItem item) {
-    	//TODO: fix
-    	return true;
-        //return item.equals(ControllerItem.DPAD_CENTER);
     }
 
     private boolean hasAValue(ControllerItem item, int controllerIndex) {

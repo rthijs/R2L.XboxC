@@ -20,7 +20,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setTitle("XBoxC - R2L");
 		config.setWindowedMode(WIDTH, HEIGHT);
-		config.setResizable(false); //TODO: use this flag?
+		config.setResizable(false);
 		config.setWindowIcon(ICON_FILETYPE, ICON_ARRAY);
 		new Lwjgl3Application(new XboxC(), config);
 	}

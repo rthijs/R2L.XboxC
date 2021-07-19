@@ -19,7 +19,6 @@ public class XboxControllerListener extends ControllerAdapter {
 
     @Override
     public boolean buttonDown(Controller controller, int buttonCode) {
-    	System.out.println("buttonDown event: " + buttonCode);
         ControllerItem item = ControllerItem.getButtonForCode(buttonCode);
         observable.setControllerItemValue(controllerIndex, item, BUTTON_PRESSED);
         return false;
@@ -27,7 +26,6 @@ public class XboxControllerListener extends ControllerAdapter {
 
     @Override
     public boolean buttonUp(Controller controller, int buttonCode) {
-    	System.out.println("buttonUp event: " + buttonCode);
         ControllerItem item = ControllerItem.getButtonForCode(buttonCode);
         observable.setControllerItemValue(controllerIndex, item, BUTTON_RELEASED);
         return false;
@@ -35,7 +33,6 @@ public class XboxControllerListener extends ControllerAdapter {
 
     @Override
     public boolean axisMoved(Controller controller, int axisCode, float value) {
-    	System.out.println("axisMoved event: " + axisCode + " - " + value);
         ControllerItem item = ControllerItem.getAxisForCode(axisCode);
         observable.setControllerItemValue(controllerIndex, item, value);
         return false;

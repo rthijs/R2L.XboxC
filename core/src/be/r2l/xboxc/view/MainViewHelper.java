@@ -10,29 +10,53 @@ public class MainViewHelper {
     private XboxControllerObservable observable;
     private float width;
     private float height;
+    private BackGround backGround;
+    private XboxControllerImage xboxControllerImage;
+    private XboxControllerOverlay xboxControllerOverlay;
+    private MarkerOverlay markerOverlay;
 
     public MainViewHelper(Batch batch, XboxControllerObservable observable) {
         this.batch = batch;
         this.observable = observable;
         this.width = getWidth();
         this.height = getHeight();
+        this.backGround = initializeBackground();
+        this.xboxControllerImage = initializeXboxControllerImage();
+        this.xboxControllerOverlay = initializeXboxControllerOverlay();
+        this.markerOverlay = initializeMarkerOverlay();
     }
 
-    public BackGround getBackGround() {
-        return new BackGround(batch, width, height);
+	public BackGround getBackGround() {
+        return backGround;
     }
 
     public XboxControllerImage getXboxControllerImage() {
-        return new XboxControllerImage(batch);
+        return xboxControllerImage;
     }
 
     public XboxControllerOverlay getXboxControllerOverlay() {
-        return new XboxControllerOverlay(batch);
+        return xboxControllerOverlay;
     }
 
     public MarkerOverlay getMarkerOverlay() {
-        return new MarkerOverlay(batch, observable);
+        return markerOverlay;
     }
+    
+    protected BackGround initializeBackground() {
+    	return new BackGround(batch, width, height);
+	}
+
+	protected XboxControllerImage initializeXboxControllerImage() {
+		return new XboxControllerImage(batch);
+	}
+
+	protected XboxControllerOverlay initializeXboxControllerOverlay() {
+		return new XboxControllerOverlay(batch);
+	}
+
+	protected MarkerOverlay initializeMarkerOverlay() {
+		return new MarkerOverlay(batch, observable);
+	}
 
     protected float getWidth () {
         return Gdx.graphics.getWidth();
