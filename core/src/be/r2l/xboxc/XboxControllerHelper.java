@@ -9,13 +9,17 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.Array;
 
+import be.r2l.xboxc.communication.SocketClient;
+
 public class XboxControllerHelper {
 
     private final AtomicInteger controllerIndex = new AtomicInteger();
     private final XboxControllerObservable observable;
+    private final SocketClient socketClient;
 
-    public XboxControllerHelper(XboxControllerObservable observable) {
+    public XboxControllerHelper(XboxControllerObservable observable, SocketClient socketClient) {
         this.observable = observable;
+        this.socketClient = socketClient;
     }
 
     public void addListenerToEveryController() {
@@ -33,7 +37,7 @@ public class XboxControllerHelper {
     }
 
     protected XboxControllerListener getXboxControllerListener() {
-        return new XboxControllerListener(getControllerIndex(), observable);
+        return new XboxControllerListener(getControllerIndex(), observable, socketClient);
     }
 
     protected int getControllerIndex() {

@@ -3,6 +3,8 @@ package be.r2l.xboxc;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import be.r2l.xboxc.communication.SocketClient;
 import be.r2l.xboxc.view.MainView;
 
 
@@ -10,11 +12,14 @@ public class XboxC extends ApplicationAdapter {
 	
     private MainView mainView;
     private XboxControllerObservable observable;
+    private SocketClient socketClient;
 	
     @Override
     public void create() {
         observable = getXboxControllerObservable();
         mainView = getMainView();
+        socketClient = new SocketClient();
+        socketClient.startConnection("127.0.0.1", 8099);
         getXboxControllerHelper().addListenerToEveryController();
     }
 
@@ -23,7 +28,7 @@ public class XboxC extends ApplicationAdapter {
     }
 
     protected XboxControllerHelper getXboxControllerHelper() {
-        return new XboxControllerHelper(observable);
+        return new XboxControllerHelper(observable, socketClient);
     }
 
     protected XboxControllerObservable getXboxControllerObservable() {

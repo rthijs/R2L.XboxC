@@ -2,6 +2,8 @@ package be.r2l.xboxc;
 
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
+
+import be.r2l.xboxc.communication.SocketClient;
 import be.r2l.xboxc.hardwareAbstraction.ControllerItem;
 
 public class XboxControllerListener extends ControllerAdapter {
@@ -10,17 +12,20 @@ public class XboxControllerListener extends ControllerAdapter {
     private static final float BUTTON_RELEASED = 0F;
 
     private final XboxControllerObservable observable;
+    private final SocketClient socketClient;
     private final int controllerIndex;
 
-    public XboxControllerListener(int controllerIndex, XboxControllerObservable observable) {
+    public XboxControllerListener(int controllerIndex, XboxControllerObservable observable, SocketClient socketClient) {
         this.controllerIndex = controllerIndex;
         this.observable = observable;
+        this.socketClient = socketClient;
     }
 
     @Override
     public boolean buttonDown(Controller controller, int buttonCode) {
         ControllerItem item = ControllerItem.getButtonForCode(buttonCode);
         observable.setControllerItemValue(controllerIndex, item, BUTTON_PRESSED);
+        socketClient.sendMessage(item.name());
         return false;
     }
 
