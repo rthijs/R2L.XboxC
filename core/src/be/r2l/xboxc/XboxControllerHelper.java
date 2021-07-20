@@ -15,11 +15,9 @@ public class XboxControllerHelper {
 
     private final AtomicInteger controllerIndex = new AtomicInteger();
     private final XboxControllerObservable observable;
-    private final SocketClient socketClient;
 
-    public XboxControllerHelper(XboxControllerObservable observable, SocketClient socketClient) {
+    public XboxControllerHelper(XboxControllerObservable observable) {
         this.observable = observable;
-        this.socketClient = socketClient;
     }
 
     public void addListenerToEveryController() {
@@ -37,7 +35,7 @@ public class XboxControllerHelper {
     }
 
     protected XboxControllerListener getXboxControllerListener() {
-        return new XboxControllerListener(getControllerIndex(), observable, socketClient);
+        return new XboxControllerListener(getControllerIndex(), observable);
     }
 
     protected int getControllerIndex() {

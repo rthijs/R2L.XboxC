@@ -12,13 +12,12 @@ public class XboxControllerListener extends ControllerAdapter {
     private static final float BUTTON_RELEASED = 0F;
 
     private final XboxControllerObservable observable;
-    private final SocketClient socketClient;
+    private final SocketClient socketClient = SocketClient.getInstance();
     private final int controllerIndex;
 
-    public XboxControllerListener(int controllerIndex, XboxControllerObservable observable, SocketClient socketClient) {
+    public XboxControllerListener(int controllerIndex, XboxControllerObservable observable) {
         this.controllerIndex = controllerIndex;
         this.observable = observable;
-        this.socketClient = socketClient;
     }
 
     @Override
