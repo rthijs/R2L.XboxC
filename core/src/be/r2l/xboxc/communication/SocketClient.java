@@ -2,8 +2,11 @@ package be.r2l.xboxc.communication;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -19,7 +22,7 @@ public final class SocketClient {
 	private BufferedReader in;
 	
 	private SocketClient() {
-		
+		//Can't touch this, naaa nana na
 	}
 	
 	public static SocketClient getInstance() {
@@ -29,28 +32,31 @@ public final class SocketClient {
 		return INSTANCE;
 	}
 	
-
 	public void startConnection() {
-		try {
-			clientSocket = new Socket(IP, PORT);
-			out = new PrintWriter(clientSocket.getOutputStream(), true);
-			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		clientSocket = getSocket();
+		out = getPrintWriter(clientSocket);
+		in = getBufferedReader(clientSocket);
 	}
 
-	public String sendMessage(String msg) {
-		out.println(msg);
-		String response = "";
-		try {
-			response = in.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
+	public void sendMessage(String message) {
+		if (clientSocket != null) {
+			sendMessageSocket(message);
+		} else {
+			sendMessageConsole(message);
+			retryStartConnection();
 		}
-		return response;
+	}
+	
+	private void sendMessageSocket(String message) {
+		out.println(message);
+	}
+	
+	private void sendMessageConsole(String message) {
+		System.out.println(message);
+	}
+	
+	private void retryStartConnection() {
+		startConnection();
 	}
 
 	public void stopConnection() {
@@ -60,6 +66,44 @@ public final class SocketClient {
 			clientSocket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (NullPointerException e) {
+			System.out.println("Dit moet je toch eens fixen, Roel.");
 		}
+	}
+	
+	protected Socket getSocket() {
+		Socket socket = null;
+		try {
+			socket = new Socket(IP, PORT);
+		} catch (ConnectException e){
+			System.out.println("Not connected to server, using dummy output.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return socket;
+	}
+	
+	private PrintWriter getPrintWriter(Socket socket) {
+		PrintWriter printWriter = null;
+		if (socket != null) {
+			try {
+				printWriter = new PrintWriter(socket.getOutputStream(), true);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} 
+		return printWriter;
+	}
+
+	private BufferedReader getBufferedReader(Socket socket) {
+		BufferedReader reader = null;
+		if (socket != null) {
+			try {
+				reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return reader;
 	}
 }
