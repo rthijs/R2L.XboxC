@@ -6,32 +6,41 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter.OutputType;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import be.r2l.xboxc.hardwareAbstraction.ControllerItem;
+
 public final class SocketClient {
-	
+
 	private static SocketClient INSTANCE;
-	
+
 	private static final String IP = "127.0.0.1";
 	private static final int PORT = 8099;
-	
+
 	private Socket clientSocket;
 	private PrintWriter out;
 	private BufferedReader in;
-	
+
 	private SocketClient() {
-		//Can't touch this, naaa nana na
+		// Can't touch this, naaa nana na
 	}
-	
+
 	public static SocketClient getInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new SocketClient();
 		}
 		return INSTANCE;
 	}
-	
+
 	public void startConnection() {
 		clientSocket = getSocket();
 		out = getPrintWriter(clientSocket);
@@ -46,15 +55,15 @@ public final class SocketClient {
 			retryStartConnection();
 		}
 	}
-	
+
 	private void sendMessageSocket(String message) {
 		out.println(message);
 	}
-	
+
 	private void sendMessageConsole(String message) {
 		System.out.println(message);
 	}
-	
+
 	private void retryStartConnection() {
 		startConnection();
 	}
@@ -70,19 +79,19 @@ public final class SocketClient {
 			System.out.println("Dit moet je toch eens fixen, Roel.");
 		}
 	}
-	
+
 	protected Socket getSocket() {
 		Socket socket = null;
 		try {
 			socket = new Socket(IP, PORT);
-		} catch (ConnectException e){
+		} catch (ConnectException e) {
 			System.out.println("Not connected to server, using dummy output.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return socket;
 	}
-	
+
 	private PrintWriter getPrintWriter(Socket socket) {
 		PrintWriter printWriter = null;
 		if (socket != null) {
@@ -91,7 +100,7 @@ public final class SocketClient {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} 
+		}
 		return printWriter;
 	}
 
@@ -106,4 +115,23 @@ public final class SocketClient {
 		}
 		return reader;
 	}
+
+	public void sendMessage(int controllerIndex, ControllerItem item, float value) {
+		String message = formatMessage(controllerIndex, item, value);
+		sendMessage(message);
+	}
+
+	private String formatMessage(int controllerIndex, ControllerItem item, float value) {
+		ControllerData data = new ControllerData(controllerIndex, item, value);
+		ObjectMapper mapper = new ObjectMapper();
+		StringWriter stringWriter = new StringWriter();
+		try {
+			mapper.writeValue(stringWriter, data);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return stringWriter.toString();
+	}
+	
+	
 }

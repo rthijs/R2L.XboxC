@@ -24,7 +24,7 @@ public class XboxControllerListener extends ControllerAdapter {
     public boolean buttonDown(Controller controller, int buttonCode) {
         ControllerItem item = ControllerItem.getButtonForCode(buttonCode);
         observable.setControllerItemValue(controllerIndex, item, BUTTON_PRESSED);
-        socketClient.sendMessage(item.name());
+        socketClient.sendMessage(controllerIndex, item, BUTTON_PRESSED);
         return false;
     }
 
@@ -32,6 +32,7 @@ public class XboxControllerListener extends ControllerAdapter {
     public boolean buttonUp(Controller controller, int buttonCode) {
         ControllerItem item = ControllerItem.getButtonForCode(buttonCode);
         observable.setControllerItemValue(controllerIndex, item, BUTTON_RELEASED);
+        socketClient.sendMessage(controllerIndex, item, BUTTON_RELEASED);
         return false;
     }
 
@@ -39,6 +40,7 @@ public class XboxControllerListener extends ControllerAdapter {
     public boolean axisMoved(Controller controller, int axisCode, float value) {
         ControllerItem item = ControllerItem.getAxisForCode(axisCode);
         observable.setControllerItemValue(controllerIndex, item, value);
+        socketClient.sendMessage(controllerIndex, item, value);
         return false;
     }
 }

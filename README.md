@@ -4,10 +4,10 @@ This is a simple application written in Java with LibGDX that takes controller i
 
 ## Download
 
-Download the latest build [here](readmeResources/xboxc-0.1.jar)
+Download the latest build [here](readmeResources/xboxc-0.2.jar)
 
 ## Run
-- from terminal execute `java -jar xboxc-0.1.jar`
+- from terminal execute `java -jar xboxc-0.2.jar`
 - from a file browser `chmod +x` the jar and double click it
 
 The program is a window with the image of an xbox controller, when input is detected it is shown with a coloured marker. There are 4 colours of markers but there is no limit on how many controllers you can use.

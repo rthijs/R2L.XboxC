@@ -55,6 +55,7 @@ project(":core") {
     apply plugin: "kotlin"
 
     dependencies {
+        implementation "com.fasterxml.jackson.core:jackson-databind:2.10.0"
         api "junit:junit:4.11+"
         api "org.hamcrest:hamcrest:2.2"
         api "org.mockito:mockito-core:2.+"
