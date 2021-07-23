@@ -52,7 +52,7 @@ Add [XboxC-latest.jar](readmeResources/XboxC-latest.jar). to your classpath.
 
 Write a `ControllerEventHandler` that implements `ControllerInputHandler`. This class can be empty for now as the ControllerInputHandler interface provides a default method.
 
-```java
+```Java
 public class ControllerEventHandler implements ControllerInputHandler {
 
 }
@@ -95,7 +95,7 @@ This is output by the default method in the `ControllerInputHandler` interface.
 
 Now we can override the `handleSocketInput` method from the `ControllerInputHandler` interface.
 
-```java
+```Java
 public class ControllerEventHandler implements ControllerInputHandler {
 	public void handleSocketInput(String input) {
 		System.out.println(input);
@@ -122,7 +122,7 @@ Start the server and restart the client, now we log the raw input. These are Str
 
 We can map this JSON to an object of type `ControllerInputData`.
 
-```java
+```Java
 public class ControllerEventHandler implements ControllerInputHandler {
 	public void handleSocketInput(String input) {
 		
@@ -159,7 +159,7 @@ BUTTON_R_BUMPER
 All possible items from `getItem` are defined in an enum called `ControllerButtons` so if you code a switch statement on the enum value:
 
 ControllerEventHandler.java
-```java
+```Java
 public class ControllerEventHandler implements ControllerInputHandler {
 	
 	public void handleSocketInput(String input) {
@@ -179,7 +179,7 @@ Your IDE should alert you that you need to add a case for every enum item.
 
 Click "add missing case statements" to let the IDE work for you.
 
-```java
+```Java
 
 public class ControllerEventHandler implements ControllerInputHandler {
 	
@@ -263,11 +263,208 @@ That's it. You now have game controller input in your Java program.
 
 ### Kotlin
 
-TODO
+Add [XboxC-latest.jar](readmeResources/XboxC-latest.jar). to your classpath.
+
+Write a `ControllerEventHandler` that implements `ControllerInputHandler`. This class can be empty for now as the ControllerInputHandler interface provides a default method.
+
+```Kotlin
+class ControllerEventHandler : ControllerInputHandler {
+
+}
+```
+Use an instance of `ControllerEventHandler` as parameter to start the server:
+
+```Kotlin
+fun main(args: Array<String>) {
+    val inputHandler: ControllerInputHandler = ControllerEventHandler()
+    Server().start(inputHandler)
+}
+```
+
+Run Main.kt, start XboxC and hit a few buttons on your game controller. If everything is well you should see output in the console:
+
+```
+controller :0: AXIS_R_TRIGGER - 1.0
+controller :0: AXIS_R_STICK_HORIZONTAL_AXIS - -0.21570483
+controller :0: AXIS_R_STICK_HORIZONTAL_AXIS - -0.019623403
+controller :0: AXIS_R_STICK_VERTICAL_AXIS - 0.003906369
+controller :0: AXIS_R_STICK_HORIZONTAL_AXIS - 0.003906369
+controller :0: BUTTON_R_STICK - 1.0
+controller :0: AXIS_R_STICK_VERTICAL_AXIS - 0.019592883
+controller :0: AXIS_R_TRIGGER - 0.0
+controller :0: AXIS_R_STICK_VERTICAL_AXIS - 0.02743614
+controller :0: AXIS_R_STICK_VERTICAL_AXIS - 0.08233894
+```
+This is because the `ControllerInputHandler` has a default method that displays this information.
+
+Now we can start writing our actual code in `ControllerEventHandler`, start by overriding the `handleSocketInput` method.
+
+```Kotlin
+class ControllerEventHandler : ControllerInputHandler {
+    override fun handleSocketInput(input: String) {
+        println(input)
+    }
+}
+```
+
+Run Main.kt again, don't forget to restart the XboxC application as it will not automatically reconnect if it loses connection to a server.
+
+The console output should look like this:
+```
+{"controllerIndex":0,"item":"AXIS_R_STICK_HORIZONTAL_AXIS","value":-0.082369454}
+{"controllerIndex":0,"item":"AXIS_R_STICK_HORIZONTAL_AXIS","value":0.003906369}
+{"controllerIndex":0,"item":"AXIS_R_STICK_VERTICAL_AXIS","value":0.22351757}
+{"controllerIndex":0,"item":"AXIS_R_STICK_VERTICAL_AXIS","value":0.29410687}
+{"controllerIndex":0,"item":"AXIS_R_STICK_VERTICAL_AXIS","value":0.30195013}
+{"controllerIndex":0,"item":"AXIS_R_STICK_VERTICAL_AXIS","value":0.33332315}
+{"controllerIndex":0,"item":"AXIS_R_STICK_VERTICAL_AXIS","value":0.30979338}
+{"controllerIndex":0,"item":"AXIS_R_TRIGGER","value":0.0}
+{"controllerIndex":0,"item":"AXIS_R_STICK_VERTICAL_AXIS","value":0.24704733}
+{"controllerIndex":0,"item":"BUTTON_A","value":0.0}
+{"controllerIndex":0,"item":"BUTTON_R_BUMPER","value":0.0}
+{"controllerIndex":0,"item":"AXIS_R_STICK_VERTICAL_AXIS","value":0.003906369}
+```
+
+These are the JSON strings that are coming in through the socket. The `XboxC-latest.jar` has an enum of all possible `item` values. First convert the input to an instance of `ControllerInputData` using the handy `ControllerInputDataMapper`.
+
+```Kotlin
+class ControllerEventHandler : ControllerInputHandler {
+    override fun handleSocketInput(input: String) {
+        val data: ControllerInputData = ControllerInputDataMapper.getControllerInputData(input)
+        
+        println(data.controllerIndex)
+        println(data.item)
+        println(data.value)
+    }
+}
+```
+
+Now you can switch based on data.item and add your actual code for each controller event.
+
+```Kotlin
+class ControllerEventHandler : ControllerInputHandler {
+    override fun handleSocketInput(input: String) {
+        val data: ControllerInputData = ControllerInputDataMapper.getControllerInputData(input)
+
+        when (data.item) {
+            ControllerButtons.BUTTON_A -> handleButtonA(data.controllerIndex, data.value)
+            ControllerButtons.BUTTON_B -> handleButtonB(data.controllerIndex, data.value)
+            //
+            //Here a long list of all possible ControllerButtons
+            //
+            else -> {
+                println("No handler defined for ${data.item}")
+            }
+
+        }
+    }
+
+    private fun handleButtonA(controllerIndex: Int, value: Float) {
+        println("Controller $controllerIndex, BUTTON_A value to: $value")
+    }
+
+    private fun handleButtonB(controllerIndex: Int, value: Float) {
+        println("Controller $controllerIndex, BUTTON_B value to: $value")
+    }
+}
+```
+
+
+console output:
+```
+Controller 0, BUTTON_A value to: 1.0
+Controller 0, BUTTON_A value to: 0.0
+Controller 0, BUTTON_B value to: 1.0
+Controller 0, BUTTON_B value to: 0.0
+No handler defined for BUTTON_X
+No handler defined for BUTTON_X
+No handler defined for BUTTON_Y
+No handler defined for BUTTON_Y
+No handler defined for BUTTON_R_BUMPER
+No handler defined for BUTTON_R_BUMPER
+```
 
 ### Python
 
-TODO
+This is an example Python script for a server that listens for events from XboxC.
+
+> Start the server before launching XboxC! It waits for a client to connect, if the client is already running this won't work.
+
+```Python
+import socket
+import json
+
+def xboxc_server():
+    host = "127.0.0.1"
+    port = 8099
+
+    server_socket = socket.socket()
+    server_socket.bind((host, port))
+
+    server_socket.listen(1) #we only listen to one client
+    conn, address = server_socket.accept()  # accept new connection
+    print("Connection from: " + str(address))
+
+    while True:
+        data = conn.recv(128).decode() #message max size 128 bytes
+        print(str(data))
+        
+        input_event = json.loads(data)
+        
+        index = input_event['controllerIndex']
+        item = input_event['item']
+        value = input_event['value']
+
+        print(str(index))
+        print(str(item))
+        print(str(value))
+        print('--------------------------')
+
+
+    conn.close()
+
+
+if __name__ == '__main__':
+    xboxc_server()
+```
+
+output:
+```
+0
+AXIS_R_STICK_VERTICAL_AXIS
+-0.67845696
+--------------------------
+{"controllerIndex":0,"item":"AXIS_R_STICK_VERTICAL_AXIS","value":-0.5686514}
+
+0
+AXIS_R_STICK_VERTICAL_AXIS
+-0.5686514
+--------------------------
+{"controllerIndex":0,"item":"AXIS_R_STICK_VERTICAL_AXIS","value":-0.2941374}
+
+0
+AXIS_R_STICK_VERTICAL_AXIS
+-0.2941374
+--------------------------
+{"controllerIndex":0,"item":"AXIS_R_STICK_VERTICAL_AXIS","value":0.003906369}
+
+0
+AXIS_R_STICK_VERTICAL_AXIS
+0.003906369
+--------------------------
+{"controllerIndex":0,"item":"BUTTON_A","value":1.0}
+
+0
+BUTTON_A
+1.0
+--------------------------
+{"controllerIndex":0,"item":"BUTTON_A","value":0.0}
+
+0
+BUTTON_A
+0.0
+--------------------------
+```
 
 ### Others
 
