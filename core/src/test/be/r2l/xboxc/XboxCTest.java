@@ -16,6 +16,8 @@ import be.r2l.xboxc.view.MainView;
 public class XboxCTest {
 
 	private static final float DELTA_TIME = .666f;
+	private static final String IP_ADDRESS = "127.0.0.1";
+	private static final int PORT = 8099;
 
 	private MainView mockMainView;
 	private XboxControllerObservable mockObservable;
@@ -29,7 +31,7 @@ public class XboxCTest {
 		mockObservable = mock(XboxControllerObservable.class);
 		mockHelper = mock(XboxControllerHelper.class);
 		doNothing().when(mockHelper).addListenerToEveryController();
-		xboxCToTest = new TestXboxC();
+		xboxCToTest = new TestXboxC(IP_ADDRESS, PORT);
 	}
 
 	@Test
@@ -53,6 +55,11 @@ public class XboxCTest {
 	}
 
 	private class TestXboxC extends XboxC {
+		public TestXboxC(String ip_address, int port) {
+			super(ip_address, port);
+			// TODO Auto-generated constructor stub
+		}
+
 		@Override
 		protected MainView getMainView() {
 			return mockMainView;

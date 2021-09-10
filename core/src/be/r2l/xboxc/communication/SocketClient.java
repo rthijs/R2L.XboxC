@@ -2,29 +2,20 @@ package be.r2l.xboxc.communication;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ConnectException;
 import java.net.Socket;
-import java.net.UnknownHostException;
-
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter.OutputType;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import be.r2l.xboxc.hardwareAbstraction.ControllerItem;
 
 public final class SocketClient {
 
 	private static SocketClient INSTANCE;
 
-	private static final String IP = "127.0.0.1";
-	private static final int PORT = 8099;
+	private String IP = "127.0.0.1";
+	private int PORT = 8099;
 
 	private Socket clientSocket;
 	private PrintWriter out;
@@ -33,10 +24,22 @@ public final class SocketClient {
 	private SocketClient() {
 		// Can't touch this, naaa nana na
 	}
+	
+	private SocketClient(String ip_address, int port) {
+		this.IP = ip_address;
+		this.PORT = port;
+	}
 
+	public static SocketClient getInstance(String ip_address, int port) {
+		if (INSTANCE == null) {
+			INSTANCE = new SocketClient(ip_address, port);
+		}
+		return INSTANCE;
+	}
+	
 	public static SocketClient getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new SocketClient();
+			System.out.println("SocketClient not instanciated, call getInstance with parameters first.");
 		}
 		return INSTANCE;
 	}
@@ -84,6 +87,7 @@ public final class SocketClient {
 		Socket socket = null;
 		try {
 			socket = new Socket(IP, PORT);
+			System.out.println("Socket created for " + IP + ":" + PORT);
 		} catch (ConnectException e) {
 			System.out.println("Not connected to server, using dummy output.");
 		} catch (Exception e) {

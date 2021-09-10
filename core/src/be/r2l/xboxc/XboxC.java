@@ -12,12 +12,19 @@ public class XboxC extends ApplicationAdapter {
 	
     private MainView mainView;
     private XboxControllerObservable observable;
+    private String ip_address;
+    private int port;
+    
+    public XboxC(String ip_address, int port) {
+    	this.ip_address = ip_address;
+    	this.port = port;
+    }
 	
     @Override
     public void create() {
         observable = getXboxControllerObservable();
         mainView = getMainView();
-        SocketClient.getInstance().startConnection();
+        SocketClient.getInstance(ip_address, port).startConnection();
         getXboxControllerHelper().addListenerToEveryController();
     }
 
@@ -41,7 +48,7 @@ public class XboxC extends ApplicationAdapter {
     @Override
     public void dispose() {
         mainView.dispose();
-        SocketClient.getInstance().stopConnection();
+        SocketClient.getInstance(ip_address, port).stopConnection();
     }
 
     protected float getDeltaTime() {
